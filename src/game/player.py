@@ -27,20 +27,24 @@ class Player(pygame.sprite.Sprite):
 
         # timer
         self.timers = {
-            'tool use': Timer(350, self.use_tool)
+            'tool use': Timer(350, self.use_tool),
+            'tool switch': Timer(200)
         }
 
         # tools
-        self.selected_tool = 'sword'
+        self.tools = ['bronze_sword']
+        self.tool_index = 0
+        self.selected_tool = self.tools[self.tool_index]
 
     def use_tool(self):
-        print(self.selected_tool)
+        # print(self.selected_tool)
+        pass
 
     def import_assets(self):
         self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
                            'up_idle': [], 'down_idle': [], 'left_idle': [],
-                           'right_idle': [], 'up_sword': [], 'down_sword': [], 'left_sword': [],
-                           'right_sword': []}
+                           'right_idle': [], 'up_bronze_sword': [], 'down_bronze_sword': [], 'left_bronze_sword': [],
+                           'right_bronze_sword': []}
 
         for animation in self.animations.keys():
             full_path = r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\player/' + animation
@@ -81,7 +85,13 @@ class Player(pygame.sprite.Sprite):
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
 
-    # timer for the tool use
+            # change tool
+            if keys[pygame.K_q] and not self.timers['tool switch'].active:
+                self.timers['tool switch'].activate()
+                self.tool_index += 1
+                if self.tool_index >= len(self.tools):
+                    self.tool_index = 0
+                self.selected_tool = self.tools[self.tool_index]
 
     def get_status(self):
 
