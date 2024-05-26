@@ -18,17 +18,15 @@ class Level:
         self.overlay = Overlay(self.player)
 
     def setup(self):
-
+        tmx_data = load_pygame(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\data\map.tmx')
+        for x, y, surf in tmx_data.get_layer_by_name('ground').tiles():
+            pos = (x * TILESIZE, y * TILESIZE)
+            Generic(pos, surf, self.all_sprites, LAYERS['ground'])
 
         self.player = Player((640, 360), group=self.all_sprites)
 
-        Generic(pos=(0, 0), surf=pygame.image.load(
-            r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\world\ground.png').convert_alpha(),
-                groups=self.all_sprites, z=LAYERS['ground'])
-
     def run(self, dt):
         self.display_surface.fill('black')
-        # self.all_sprites.draw(self.display_surface)
         self.all_sprites.custom_draw(self.player)
         self.all_sprites.update(dt)
 
@@ -51,6 +49,7 @@ class CameraGroup(pygame.sprite.Group):
 
     def custom_draw(self, player):
         self.center_target_camera(player)
+        self.virtual_surface.fill(BLACK)
 
         for layer in LAYERS.values():
             for sprite in self.sprites():

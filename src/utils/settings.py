@@ -11,7 +11,11 @@ OVERLAY_POSITIONS = {
     'tool': (40, SCREEN_HEIGHT - 15)
 }
 
+# layers
 LAYERS = {
     'ground': 0,
     'main': 1
 }
+
+# colours
+BLACK = (0, 0, 0)
