@@ -14,7 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.frame_index = 0
 
         # general setup
-        self.image = self.animations[self.status][self.frame_index]
+        self.image = self.movement_animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
         self.z = LAYERS['main']
 
@@ -24,16 +24,16 @@ class Player(pygame.sprite.Sprite):
         self.speed = 200
 
         # animation attributes
-        self.animation_speed = 3
+        self.animation_speed = 10
 
         # timer
         self.timers = {
             'tool use': Timer(350, self.use_tool),
-            'tool switch': Timer(200)
+            'tool switch': Timer(600)
         }
 
         # tools
-        self.tools = ['bronze_sword']
+        self.tools = ['bronze_sword', 'simple_sword']
         self.tool_index = 0
         self.selected_tool = self.tools[self.tool_index]
 
@@ -42,20 +42,35 @@ class Player(pygame.sprite.Sprite):
         pass
 
     def import_assets(self):
-        self.animations = {'up': [], 'down': [], 'left': [], 'right': [],
-                           'up_idle': [], 'down_idle': [], 'left_idle': [],
-                           'right_idle': [], 'up_bronze_sword': [], 'down_bronze_sword': [], 'left_bronze_sword': [],
-                           'right_bronze_sword': []}
+        self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
+                                    'up_idle': [], 'down_idle': [], 'left_idle': [],
+                                    'right_idle': []}
+        self.attack_animations = {'up_bronze_sword': [], 'down_bronze_sword': [], 'left_bronze_sword': [],
+                                  'right_bronze_sword': [], 'up_simple_sword': [], 'down_simple_sword': [],
+                                  'left_simple_sword': [],
+                                  'right_simple_sword': []}
 
-        for animation in self.animations.keys():
-            full_path = r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\player/' + animation
-            self.animations[animation] = import_folder(full_path)
+        for attack_animation in self.attack_animations.keys():
+            full_path = r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\player\attack/' + attack_animation
+            self.attack_animations[attack_animation] = import_folder(full_path)
+
+        for move_animation in self.movement_animations.keys():
+            full_path = r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\player\movement/' + move_animation
+            self.movement_animations[move_animation] = import_folder(full_path)
 
     def animate(self, dt):
-        self.frame_index += 3 * dt * self.animation_speed
-        if self.frame_index >= len(self.animations[self.status]):
-            self.frame_index = 0
-        self.image = self.animations[self.status][int(self.frame_index)]
+        if self.timers['tool use'].active:
+            self.frame_index += dt * (
+                    (len(self.attack_animations[self.status]) * SECOND_TO_MILLISECOND) / self.timers[
+                'tool use'].duration)
+            if self.frame_index >= len(self.attack_animations[self.status]):
+                self.frame_index = 0
+            self.image = self.attack_animations[self.status][int(self.frame_index)]
+        else:
+            self.frame_index += dt * self.animation_speed
+            if self.frame_index >= len(self.movement_animations[self.status]):
+                self.frame_index = 0
+            self.image = self.movement_animations[self.status][int(self.frame_index)]
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -124,8 +139,8 @@ class Player(pygame.sprite.Sprite):
 
     def update(self, dt):
         self.input()
-        self.get_status()
         self.update_timers()
+        self.get_status()
 
         self.move(dt)
         self.animate(dt)

@@ -19,14 +19,16 @@ class Level:
 
     def setup(self):
         tmx_data = load_pygame(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\data\map.tmx')
+
         for x, y, surf in tmx_data.get_layer_by_name('ground').tiles():
             pos = (x * TILESIZE, y * TILESIZE)
             Generic(pos, surf, self.all_sprites, LAYERS['ground'])
 
-        self.player = Player((640, 360), group=self.all_sprites)
+        self.player = Player((500, 500), group=self.all_sprites)
+
 
     def run(self, dt):
-        self.display_surface.fill('black')
+        self.display_surface.fill(BLACK)
         self.all_sprites.custom_draw(self.player)
         self.all_sprites.update(dt)
 
@@ -42,6 +44,7 @@ class CameraGroup(pygame.sprite.Group):
         # camera offset
         self.offset = pygame.math.Vector2()
         self.virtual_surface = pygame.Surface((VIRTUAL_SCREEN_WIDTH, VIRTUAL_SCREEN_HEIGHT))
+        self.virtual_rect = self.virtual_surface.get_rect()
 
     def center_target_camera(self, target):
         self.offset.x = target.rect.centerx - (VIRTUAL_SCREEN_WIDTH // 2)
@@ -58,4 +61,4 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect.center -= self.offset
                     self.virtual_surface.blit(sprite.image, offset_rect)
         scaled_surf = pygame.transform.scale(self.virtual_surface, self.current_size)
-        self.display_surface.blit(scaled_surf, (0, 0))
+        self.display_surface.blit(scaled_surf, self.virtual_rect)
