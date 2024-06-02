@@ -8,7 +8,7 @@ TILESIZE = 32
 
 # overlay positions
 OVERLAY_POSITIONS = {
-    'tool': (212, 953)
+    'tool': (40, SCREEN_HEIGHT - 15)
 }
 
 # layers

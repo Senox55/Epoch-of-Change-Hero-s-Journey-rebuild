@@ -13,6 +13,7 @@ class Level:
 
         # sprite groups
         self.all_sprites = CameraGroup()
+        self.collision_sprites = pygame.sprite.Group()
 
         self.setup()
         self.overlay = Overlay(self.player)
@@ -20,12 +21,17 @@ class Level:
     def setup(self):
         tmx_data = load_pygame(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\data\map.tmx')
 
+        # ground
         for x, y, surf in tmx_data.get_layer_by_name('ground').tiles():
             pos = (x * TILESIZE, y * TILESIZE)
             Generic(pos, surf, self.all_sprites, LAYERS['ground'])
 
-        self.player = Player((500, 500), group=self.all_sprites)
+        # decoration
+        for x, y, surf in tmx_data.get_layer_by_name('decoration').tiles():
+            pos = (x * TILESIZE, y * TILESIZE)
+            Generic(pos, surf, groups=[self.all_sprites, self.collision_sprites])
 
+        self.player = Player((500, 500), self.all_sprites, self.collision_sprites)
 
     def run(self, dt):
         self.display_surface.fill(BLACK)
@@ -55,7 +61,7 @@ class CameraGroup(pygame.sprite.Group):
         self.virtual_surface.fill(BLACK)
 
         for layer in LAYERS.values():
-            for sprite in self.sprites():
+            for sprite in sorted(self.sprites(), key=lambda sprite: sprite.rect.centery):
                 if sprite.z == layer:
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
