@@ -2,7 +2,7 @@ import pygame
 from src.utils.settings import *
 from src.game.player import Player
 from src.game.overlay import Overlay
-from src.utils.sprites import Generic
+from src.utils.sprites import Generic, Tree, Bush
 from pytmx.util_pygame import load_pygame
 
 
@@ -26,10 +26,10 @@ class Level:
             pos = (x * TILESIZE, y * TILESIZE)
             Generic(pos, surf, self.all_sprites, LAYERS['ground'])
 
-        # decoration
-        for x, y, surf in tmx_data.get_layer_by_name('decoration').tiles():
-            pos = (x * TILESIZE, y * TILESIZE)
-            Generic(pos, surf, groups=[self.all_sprites, self.collision_sprites])
+        # bushes
+        for obj in tmx_data.get_layer_by_name('bushes'):
+            pos = (obj.x, obj.y)
+            Bush(pos, obj.image, groups=[self.all_sprites, self.collision_sprites])
 
         self.player = Player((500, 500), self.all_sprites, self.collision_sprites)
 
