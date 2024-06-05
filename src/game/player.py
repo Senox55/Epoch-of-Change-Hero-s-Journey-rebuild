@@ -41,6 +41,11 @@ class Player(pygame.sprite.Sprite):
         self.tool_index = 0
         self.selected_tool = self.tools[self.tool_index]
 
+        # stats
+        self.stats = {'health': 100, 'attack': 30}
+        self.health = self.stats['health'] - 30
+        self.attack = self.stats['attack']
+
     def use_tool(self):
         # print(self.selected_tool)
         pass

@@ -6,10 +6,15 @@ VIRTUAL_SCREEN_HEIGHT = SCREEN_HEIGHT // 2
 
 TILESIZE = 32
 
-# overlay positions
+# overlay
+HEALTH_BAR_WIDTH = 200
+HEALTH_BAR_HEIGHT = 20
 OVERLAY_POSITIONS = {
     'tool': (40, SCREEN_HEIGHT - 15)
 }
+
+# overlay colors
+HEALTH_COLOR = 'red'
 
 # layers
 LAYERS = {
@@ -17,7 +22,7 @@ LAYERS = {
     'main': 1
 }
 
-# colours
+# general colours
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 
