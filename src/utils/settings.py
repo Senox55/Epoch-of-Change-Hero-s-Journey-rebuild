@@ -33,3 +33,8 @@ OVERLAY_BG_COLOR = DARK_GREY
 
 # time
 SECOND_TO_MILLISECOND = 1000
+
+# enemy
+monster_data = {
+    'slime': {'health': 100, 'damage': 10, 'speed': 10, 'attack_radius': 5, 'notice_radius': 500}
+}

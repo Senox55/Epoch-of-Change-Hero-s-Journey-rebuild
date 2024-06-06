@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="64">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="100" height="100" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="108">
  <tileset firstgid="1" source="tilesets/grass.tsx"/>
  <tileset firstgid="65" source="tilesets/plants.tsx"/>
+ <tileset firstgid="67" source="tilesets/player.tsx"/>
+ <tileset firstgid="68" source="tilesets/enemy.tsx"/>
  <layer id="1" name="ground" width="100" height="100">
   <data encoding="csv">
 4,7,12,7,2,17,3,11,32,28,28,13,14,14,10,13,28,4,15,6,26,11,6,19,9,23,7,9,1,25,6,11,32,16,26,27,16,31,23,31,1,19,4,25,28,20,2,4,5,9,18,7,11,27,6,30,20,7,19,17,31,12,7,12,13,20,32,28,5,13,2,18,25,4,20,24,14,24,11,7,21,19,10,2,8,32,30,32,29,16,22,4,20,6,20,18,16,29,30,32,
@@ -138,5 +140,14 @@
   <object id="61" gid="66" x="1249" y="1605" width="47" height="42"/>
   <object id="62" gid="66" x="1609" y="1565" width="47" height="42"/>
   <object id="63" gid="66" x="1809" y="1557" width="47" height="42"/>
+ </objectgroup>
+ <objectgroup id="5" name="player">
+  <object id="103" gid="67" x="1507" y="1504" width="48" height="48"/>
+ </objectgroup>
+ <objectgroup id="6" name="enemy">
+  <object id="104" name="slime" gid="68" x="1597" y="1421" width="32" height="32"/>
+  <object id="105" name="slime" gid="68" x="1481" y="1364" width="32" height="32"/>
+  <object id="106" name="slime" gid="68" x="1459" y="1482" width="32" height="32"/>
+  <object id="107" name="slime" gid="68" x="1441" y="1584" width="32" height="32"/>
  </objectgroup>
 </map>

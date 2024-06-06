@@ -1,6 +1,7 @@
 import pygame
 from src.utils.settings import *
 from src.game.player import Player
+from src.game.enemy import Enemy
 from src.game.overlay import Overlay
 from src.utils.sprites import Generic, Tree, Bush
 from pytmx.util_pygame import load_pygame
@@ -24,19 +25,28 @@ class Level:
         # ground
         for x, y, surf in tmx_data.get_layer_by_name('ground').tiles():
             pos = (x * TILESIZE, y * TILESIZE)
-            Generic(pos, surf, self.all_sprites, LAYERS['ground'])
+            Generic(pos, surf, 'ground', [self.all_sprites], LAYERS['ground'])
 
         # bushes
         for obj in tmx_data.get_layer_by_name('bushes'):
             pos = (obj.x, obj.y)
-            Bush(pos, obj.image, groups=[self.all_sprites, self.collision_sprites])
+            Bush(pos, obj.image, 'bushes', groups=[self.all_sprites, self.collision_sprites])
 
-        self.player = Player((500, 500), self.all_sprites, self.collision_sprites)
+        # entity
+        for obj in tmx_data.get_layer_by_name('enemy'):
+            pos = (obj.x, obj.y)
+            Enemy(obj.name, pos, [self.all_sprites], self.collision_sprites)
+
+        # player
+        for obj in tmx_data.get_layer_by_name('player'):
+            pos = (obj.x, obj.y)
+            self.player = Player(pos, self.all_sprites, self.collision_sprites)
 
     def run(self, dt):
         self.display_surface.fill(BLACK)
         self.all_sprites.custom_draw(self.player)
         self.all_sprites.update(dt)
+        self.all_sprites.enemy_update(self.player)
 
         self.overlay.display()
 
@@ -68,3 +78,9 @@ class CameraGroup(pygame.sprite.Group):
                     self.virtual_surface.blit(sprite.image, offset_rect)
         scaled_surf = pygame.transform.scale(self.virtual_surface, self.current_size)
         self.display_surface.blit(scaled_surf, self.virtual_rect)
+
+    def enemy_update(self, player):
+        enemy_sprites = [sprite for sprite in self.sprites() if
+                         hasattr(sprite, 'sprite_type') and sprite.sprite_type == 'enemy']
+        for enemy in enemy_sprites:
+            enemy.enemy_update(player)
