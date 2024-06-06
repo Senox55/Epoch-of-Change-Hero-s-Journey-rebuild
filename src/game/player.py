@@ -37,7 +37,7 @@ class Player(pygame.sprite.Sprite):
         }
 
         # tools
-        self.tools = ['bronze_sword', 'simple_sword']
+        self.tools = ['katana', 'simple_sword']
         self.tool_index = 0
         self.selected_tool = self.tools[self.tool_index]
 
@@ -54,8 +54,8 @@ class Player(pygame.sprite.Sprite):
         self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
                                     'up_idle': [], 'down_idle': [], 'left_idle': [],
                                     'right_idle': []}
-        self.attack_animations = {'up_bronze_sword': [], 'down_bronze_sword': [], 'left_bronze_sword': [],
-                                  'right_bronze_sword': [], 'up_simple_sword': [], 'down_simple_sword': [],
+        self.attack_animations = {'up_katana': [], 'down_katana': [], 'left_katana': [],
+                                  'right_katana': [], 'up_simple_sword': [], 'down_simple_sword': [],
                                   'left_simple_sword': [],
                                   'right_simple_sword': []}
 
