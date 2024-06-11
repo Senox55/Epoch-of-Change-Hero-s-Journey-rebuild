@@ -145,9 +145,6 @@
   <object id="103" gid="67" x="1507" y="1504" width="48" height="48"/>
  </objectgroup>
  <objectgroup id="6" name="enemy">
-  <object id="104" name="slime" gid="68" x="1597" y="1421" width="32" height="32"/>
-  <object id="105" name="slime" gid="68" x="1481" y="1364" width="32" height="32"/>
-  <object id="106" name="slime" gid="68" x="1459" y="1482" width="32" height="32"/>
   <object id="107" name="slime" gid="68" x="1441" y="1584" width="32" height="32"/>
  </objectgroup>
 </map>

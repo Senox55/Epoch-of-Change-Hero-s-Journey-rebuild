@@ -7,7 +7,7 @@ from src.game.entity import Entity
 
 
 class Player(Entity):
-    def __init__(self, pos, groups, collision_sprites):
+    def __init__(self, pos, groups, collision_sprites, create_attack, destroy_attack):
 
         # general setup
         super().__init__(groups)
@@ -27,6 +27,10 @@ class Player(Entity):
         # collision
         self.collision_sprites = collision_sprites
 
+        # attack
+        self.create_attack = create_attack
+        self.destroy_attack = destroy_attack
+
         # timer
         self.timers = {
             'tool use': Timer(350, self.use_tool),
@@ -39,9 +43,9 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 100, 'attack': 30}
+        self.stats = {'health': 100, 'damage': 30}
         self.health = self.stats['health'] - 30
-        self.attack = self.stats['attack']
+        self.damage = self.stats['damage']
 
     def use_tool(self):
         # print(self.selected_tool)
@@ -72,6 +76,7 @@ class Player(Entity):
             if self.frame_index >= len(self.attack_animations[self.status]):
                 self.frame_index = 0
             self.image = self.attack_animations[self.status][int(self.frame_index)]
+            self.destroy_attack()
         else:
             self.frame_index += dt * self.animation_speed
             if self.frame_index >= len(self.movement_animations[self.status]):
@@ -103,6 +108,7 @@ class Player(Entity):
 
             # tool use
             if keys[pygame.K_SPACE]:
+                self.create_attack()
                 self.timers['tool use'].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0

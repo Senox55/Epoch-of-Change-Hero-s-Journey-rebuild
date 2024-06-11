@@ -1,6 +1,7 @@
 import pygame
 from src.utils.settings import *
 from src.game.entity import Entity
+from src.utils.timer import Timer
 from src.utils.support import *
 
 
@@ -27,7 +28,14 @@ class Enemy(Entity):
         # collision
         self.collision_sprites = collision_sprites
 
+        # timer
+        self.timers = {
+            'attack cooldown': Timer(1000),
+            'one mil': Timer(1)
+        }
+
         # stats
+        self.health = monster_data[monster_name]['health']
         self.speed = monster_data[monster_name]['speed']
         self.attack_radius = monster_data[monster_name]['attack_radius']
         self.notice_radius = monster_data[monster_name]['notice_radius']
@@ -70,7 +78,9 @@ class Enemy(Entity):
 
     def actions(self, player):
         if self.action == 'attack':
-            print('attack')
+            if not self.timers['attack cooldown'].active:
+                print('attack')
+                self.timers['attack cooldown'].activate()
         elif self.action == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
             if abs(self.direction.y) > abs(self.direction.x):
@@ -87,9 +97,24 @@ class Enemy(Entity):
         else:
             self.direction = pygame.math.Vector2()
 
+    def get_damage(self, player, attack_type):
+        if attack_type == 'attack':
+            self.health -= player.damage
+        print(self.health)
+
+    def check_death(self):
+        if self.health <= 0:
+            self.kill()
+
+    def update_timers(self):
+        for timer in self.timers.values():
+            timer.update()
+
     def update(self, dt):
         self.move(dt)
         self.animate(dt)
+        self.update_timers()
+        self.check_death()
 
     def enemy_update(self, player):
         self.get_status(player)
