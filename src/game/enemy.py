@@ -23,16 +23,22 @@ class Enemy(Entity):
 
         # movement attributes
         self.pos = pygame.math.Vector2(self.rect.center)
-        self.movement_speed = 100
 
         # collision
         self.collision_sprites = collision_sprites
 
         # timer
         self.timers = {
-            'attack cooldown': Timer(1000),
+            'attack cooldown': Timer(TIME_ATTACKING),
             'one mil': Timer(1)
         }
+
+        # attack attributes
+        self.can_attack = True
+        self.vulnerable = True
+
+        # animation attributes
+        self.animation_speed = 10
 
         # stats
         self.health = monster_data[monster_name]['health']
@@ -76,6 +82,12 @@ class Enemy(Entity):
             self.frame_index = 0
         self.image = self.movement_animations[self.status][int(self.frame_index)]
 
+        if not self.vulnerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
+
     def actions(self, player):
         if self.action == 'attack':
             if not self.timers['attack cooldown'].active:
@@ -97,10 +109,23 @@ class Enemy(Entity):
         else:
             self.direction = pygame.math.Vector2()
 
+    def cooldown(self):
+        if self.timers['attack cooldown'].active:
+            self.timers['one mil'].activate()
+        if not self.can_attack:
+            if not self.timers['one mil'].active:
+                self.can_attack = True
+
+        if not self.vulnerable:
+            if not self.timers['one mil'].active:
+                self.vulnerable = True
+
     def get_damage(self, player, attack_type):
-        if attack_type == 'attack':
-            self.health -= player.damage
-        print(self.health)
+        if self.vulnerable:
+            if attack_type == 'attack':
+                self.health -= player.damage
+                self.timers['attack cooldown'].activate()
+            self.vulnerable = False
 
     def check_death(self):
         if self.health <= 0:
@@ -114,6 +139,7 @@ class Enemy(Entity):
         self.move(dt)
         self.animate(dt)
         self.update_timers()
+        self.cooldown()
         self.check_death()
 
     def enemy_update(self, player):

@@ -22,7 +22,9 @@ class Player(Entity):
 
         # movement attributes
         self.pos = pygame.math.Vector2(self.rect.center)
-        self.speed = 200
+
+        # animation attributes
+        self.animation_speed = 8
 
         # collision
         self.collision_sprites = collision_sprites
@@ -33,7 +35,7 @@ class Player(Entity):
 
         # timer
         self.timers = {
-            'tool use': Timer(350, self.use_tool),
+            'tool use': Timer(TIME_ATTACKING),
             'tool switch': Timer(600)
         }
 
@@ -43,9 +45,10 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 100, 'damage': 30}
+        self.stats = {'health': 100, 'damage': 30, 'speed': 100}
         self.health = self.stats['health'] - 30
         self.damage = self.stats['damage']
+        self.speed = self.stats['speed']
 
     def use_tool(self):
         # print(self.selected_tool)
@@ -75,8 +78,8 @@ class Player(Entity):
                 'tool use'].duration)
             if self.frame_index >= len(self.attack_animations[self.status]):
                 self.frame_index = 0
+                self.destroy_attack()
             self.image = self.attack_animations[self.status][int(self.frame_index)]
-            self.destroy_attack()
         else:
             self.frame_index += dt * self.animation_speed
             if self.frame_index >= len(self.movement_animations[self.status]):

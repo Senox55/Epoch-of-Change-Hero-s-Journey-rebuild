@@ -23,7 +23,6 @@ class Level:
         self.attack_sprites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
 
-
         self.setup()
         self.overlay = Overlay(self.player)
 
@@ -60,7 +59,6 @@ class Level:
 
     def player_attack_logic(self):
         if self.attack_sprites:
-            print(self.attack_sprites)
             for attack_sprite in self.attack_sprites:
                 collision_sprites = pygame.sprite.spritecollide(attack_sprite, self.attackable_sprites, False)
                 if collision_sprites:
