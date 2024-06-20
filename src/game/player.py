@@ -35,7 +35,7 @@ class Player(Entity):
 
         # timer
         self.timers = {
-            'tool use': Timer(TIME_ATTACKING),
+            'tool use': Timer(TIME_ATTACKING, self.destroy_attack),
             'tool switch': Timer(600)
         }
 
@@ -49,10 +49,6 @@ class Player(Entity):
         self.health = self.stats['health'] - 30
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']
-
-    def use_tool(self):
-        # print(self.selected_tool)
-        pass
 
     def import_assets(self):
         self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
@@ -78,7 +74,6 @@ class Player(Entity):
                 'tool use'].duration)
             if self.frame_index >= len(self.attack_animations[self.status]):
                 self.frame_index = 0
-                self.destroy_attack()
             self.image = self.attack_animations[self.status][int(self.frame_index)]
         else:
             self.frame_index += dt * self.animation_speed

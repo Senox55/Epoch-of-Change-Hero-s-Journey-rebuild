@@ -1,3 +1,5 @@
+import random
+
 import pygame
 from src.utils.settings import *
 from src.game.entity import Entity
@@ -18,7 +20,7 @@ class Enemy(Entity):
         self.import_assets(monster_name)
         self.image = self.movement_animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.hitbox = self.rect.inflate(-20, -30)
+        self.hitbox = self.rect.inflate(-10, -10)
         self.action = 'idle'
 
         # movement attributes
@@ -45,6 +47,7 @@ class Enemy(Entity):
         self.speed = monster_data[monster_name]['speed']
         self.attack_radius = monster_data[monster_name]['attack_radius']
         self.notice_radius = monster_data[monster_name]['notice_radius']
+        self.repulsion = monster_data[monster_name]['repulsion']
 
     def import_assets(self, name):
         self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
@@ -74,7 +77,7 @@ class Enemy(Entity):
         elif distance <= self.notice_radius:
             self.action = 'move'
         else:
-            self.action = 'down_idle'
+            self.action = 'stay'
 
     def animate(self, dt):
         self.frame_index += dt * self.animation_speed
@@ -106,7 +109,8 @@ class Enemy(Entity):
                     self.status = 'right'
                 else:
                     self.status = 'left'
-        else:
+        elif self.action == 'stay':
+            self.status = 'down_idle'
             self.direction = pygame.math.Vector2()
 
     def cooldown(self):
@@ -122,6 +126,7 @@ class Enemy(Entity):
 
     def get_damage(self, player, attack_type):
         if self.vulnerable:
+            self.direction = self.get_player_distance_direction(player)[1]
             if attack_type == 'attack':
                 self.health -= player.damage
                 self.timers['attack cooldown'].activate()
@@ -131,11 +136,16 @@ class Enemy(Entity):
         if self.health <= 0:
             self.kill()
 
+    def hit_reaction(self):
+        if not self.vulnerable:
+            self.direction *= -self.repulsion
+
     def update_timers(self):
         for timer in self.timers.values():
             timer.update()
 
     def update(self, dt):
+        self.hit_reaction()
         self.move(dt)
         self.animate(dt)
         self.update_timers()
