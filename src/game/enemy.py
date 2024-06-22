@@ -20,8 +20,16 @@ class Enemy(Entity):
         self.import_assets(monster_name)
         self.image = self.movement_animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.hitbox = self.rect.inflate(-10, -10)
         self.action = 'idle'
+
+        # hitbox attribute
+        self.change_hitbox_x = monster_data[monster_name]['hitbox']['x']
+        self.change_hitbox_y = monster_data[monster_name]['hitbox']['y']
+        self.hitbox_width = monster_data[monster_name]['hitbox']['width']
+        self.hitbox_height = monster_data[monster_name]['hitbox']['height']
+        self.hitbox = pygame.Rect(self.rect.x + self.change_hitbox_x, self.rect.y + self.change_hitbox_y,
+                                  self.hitbox_width,
+                                  self.hitbox_height)
 
         # movement attributes
         self.pos = pygame.math.Vector2(self.rect.center)
@@ -63,8 +71,8 @@ class Enemy(Entity):
             self.movement_animations[move_animation] = import_folder(full_path)
 
     def get_player_distance_direction(self, player):
-        enemy_vec = pygame.math.Vector2(self.rect.center)
-        player_vec = pygame.math.Vector2(player.rect.center)
+        enemy_vec = pygame.math.Vector2(self.hitbox.center)
+        player_vec = pygame.math.Vector2(player.hitbox.center)
         distance = (player_vec - enemy_vec).magnitude()
         if distance > 0:
             direction = (player_vec - enemy_vec).normalize()

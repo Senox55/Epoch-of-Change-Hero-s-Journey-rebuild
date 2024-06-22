@@ -1,3 +1,5 @@
+import pygame
+
 # screen
 SCREEN_WIDTH = 1920
 SCREEN_HEIGHT = 1080
@@ -37,7 +39,10 @@ SECOND_TO_MILLISECOND = 1000
 # enemy
 monster_data = {
     'slime': {'health': 100, 'damage': 10, 'speed': 30, 'attack_radius': 10, 'notice_radius': 400, 'repulsion': 10,
-              'attack_type': 'splash'}
+              'attack_type': 'splash', 'hitbox': {'x': 8, 'y': 13, 'width': 16, 'height': 10}},
+    'giant_slime': {'health': 1000, 'damage': 30, 'speed': 50, 'attack_radius': 10, 'notice_radius': 400,
+                    'repulsion': 10,
+                    'attack_type': 'splash', 'hitbox': {'x': 80, 'y': 130, 'width': 160, 'height': 100}}
 }
 
 # attack attributes

@@ -1,7 +1,6 @@
 import pygame
 from src.utils.settings import *
 from src.game.player import Player
-from src.utils.timer import Timer
 from src.game.enemy import Enemy
 from src.game.overlay import Overlay
 from src.game.sprites import Generic, Tree, Bush, Coffin

@@ -1,5 +1,5 @@
 import sys
-
+import random
 import pygame
 import os
 from src.utils.settings import *
@@ -19,7 +19,7 @@ class Player(Entity):
         self.status = 'down_idle'
         self.image = self.movement_animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.hitbox = self.rect.copy().inflate(-33, -27)
+        self.hitbox = pygame.Rect(self.rect.x + 1800, self.rect.y + 22, 13, 21)
         self.z = LAYERS['main']
 
         # movement attributes
