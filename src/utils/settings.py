@@ -36,7 +36,7 @@ SECOND_TO_MILLISECOND = 1000
 
 # enemy
 monster_data = {
-    'slime': {'health': 100, 'damage': 10, 'speed': 30, 'attack_radius': 10, 'notice_radius': 500, 'repulsion': 10,
+    'slime': {'health': 100, 'damage': 10, 'speed': 30, 'attack_radius': 10, 'notice_radius': 400, 'repulsion': 10,
               'attack_type': 'splash'}
 }
 
