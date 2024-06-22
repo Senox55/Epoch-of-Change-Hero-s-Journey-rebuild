@@ -32,7 +32,8 @@ class Enemy(Entity):
         # timer
         self.timers = {
             'attacked cooldown': Timer(TIME_ATTACKING),
-            'one mil': Timer(1)
+            'one mil': Timer(1),
+            'death': Timer(600)
         }
 
         # attack attributes
@@ -55,7 +56,7 @@ class Enemy(Entity):
     def import_assets(self, name):
         self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
                                     'up_idle': [], 'down_idle': [], 'left_idle': [],
-                                    'right_idle': []}
+                                    'right_idle': [], 'death': []}
 
         for move_animation in self.movement_animations.keys():
             full_path = fr'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\enemy\{name}\movement/' + move_animation
@@ -72,7 +73,7 @@ class Enemy(Entity):
 
         return (distance, direction)
 
-    def get_status(self, player):
+    def actions(self, player):
         distance = self.get_player_distance_direction(player)[0]
 
         if distance <= self.attack_radius:
@@ -83,9 +84,17 @@ class Enemy(Entity):
             self.action = 'stay'
 
     def animate(self, dt):
-        self.frame_index += dt * self.animation_speed
-        if self.frame_index >= len(self.movement_animations[self.status]):
-            self.frame_index = 0
+        if self.timers['death'].active:
+            self.frame_index += dt * (
+                    (len(self.movement_animations[self.status]) * SECOND_TO_MILLISECOND) / self.timers[
+                'death'].duration)
+            if self.frame_index >= len(self.movement_animations[self.status]):
+                self.kill()
+                self.frame_index = 0
+        else:
+            self.frame_index += dt * self.animation_speed
+            if self.frame_index >= len(self.movement_animations[self.status]):
+                self.frame_index = 0
         self.image = self.movement_animations[self.status][int(self.frame_index)]
 
         if not self.vulnerable:
@@ -94,27 +103,33 @@ class Enemy(Entity):
         else:
             self.image.set_alpha(255)
 
-    def actions(self, player):
-        if self.action == 'attack':
-            self.damage_player(self.damage, self.attack_type)
+    def get_status(self, player):
 
-        elif self.action == 'move':
-            self.direction = self.get_player_distance_direction(player)[1]
-
-            if abs(self.direction.y) > abs(self.direction.x):
-                if self.direction.y > 0:
-                    self.status = 'down'
-                else:
-                    self.status = 'up'
-
-            if abs(self.direction.x) > abs(self.direction.y):
-                if self.direction.x > 0:
-                    self.status = 'right'
-                else:
-                    self.status = 'left'
-        elif self.action == 'stay':
-            self.status = 'down_idle'
+        if self.check_death():
+            self.status = 'death'
             self.direction = pygame.math.Vector2()
+
+        else:
+            if self.action == 'attack':
+                self.damage_player(self.damage, self.attack_type)
+
+            elif self.action == 'move':
+                self.direction = self.get_player_distance_direction(player)[1]
+
+                if abs(self.direction.y) > abs(self.direction.x):
+                    if self.direction.y > 0:
+                        self.status = 'down'
+                    else:
+                        self.status = 'up'
+
+                if abs(self.direction.x) > abs(self.direction.y):
+                    if self.direction.x > 0:
+                        self.status = 'right'
+                    else:
+                        self.status = 'left'
+            elif self.action == 'stay':
+                self.status = 'down_idle'
+                self.direction = pygame.math.Vector2()
 
     def cooldowns(self):
         if self.timers['attacked cooldown'].active:
@@ -137,7 +152,12 @@ class Enemy(Entity):
 
     def check_death(self):
         if self.health <= 0:
-            self.kill()
+            if not (self.timers['death'].active):
+                self.timers['death'].activate()
+                self.frame_index = 0
+                return True
+            else:
+                return True
 
     def hit_reaction(self):
         if not self.vulnerable:
