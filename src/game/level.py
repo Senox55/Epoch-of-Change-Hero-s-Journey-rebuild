@@ -42,7 +42,8 @@ class Level:
         # entity
         for obj in tmx_data.get_layer_by_name('enemy'):
             pos = (obj.x, obj.y)
-            Enemy(obj.name, pos, [self.all_sprites, self.attackable_sprites], self.collision_sprites)
+            Enemy(obj.name, pos, [self.all_sprites, self.attackable_sprites], self.collision_sprites,
+                  self.damage_player)
 
         # player
         for obj in tmx_data.get_layer_by_name('player'):
@@ -67,6 +68,11 @@ class Level:
                             target_sprite.kill()
                         elif target_sprite.sprite_type == 'enemy':
                             target_sprite.get_damage(self.player, attack_sprite.sprite_type)
+
+    def damage_player(self, amount, attack_type):
+        if self.player.vulnerable:
+            self.player.health -= amount
+            self.player.vulnerable = False
 
     def run(self, dt):
         self.display_surface.fill(BLACK)

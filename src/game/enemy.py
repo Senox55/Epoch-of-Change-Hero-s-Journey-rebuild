@@ -8,7 +8,7 @@ from src.utils.support import *
 
 
 class Enemy(Entity):
-    def __init__(self, monster_name, pos, groups, collision_sprites):
+    def __init__(self, monster_name, pos, groups, collision_sprites, damage_player):
         # general setup
         super().__init__(groups)
         self.sprite_type = 'enemy'
@@ -31,20 +31,23 @@ class Enemy(Entity):
 
         # timer
         self.timers = {
-            'attack cooldown': Timer(TIME_ATTACKING),
+            'attacked cooldown': Timer(TIME_ATTACKING),
             'one mil': Timer(1)
         }
 
         # attack attributes
         self.can_attack = True
         self.vulnerable = True
+        self.damage_player = damage_player
 
         # animation attributes
         self.animation_speed = 10
 
         # stats
         self.health = monster_data[monster_name]['health']
+        self.damage = monster_data[monster_name]['damage']
         self.speed = monster_data[monster_name]['speed']
+        self.attack_type = monster_data[monster_name]['attack_type']
         self.attack_radius = monster_data[monster_name]['attack_radius']
         self.notice_radius = monster_data[monster_name]['notice_radius']
         self.repulsion = monster_data[monster_name]['repulsion']
@@ -55,7 +58,7 @@ class Enemy(Entity):
                                     'right_idle': []}
 
         for move_animation in self.movement_animations.keys():
-            full_path = fr'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\enemy\{self.monster_name}\movement/' + move_animation
+            full_path = fr'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\enemy\{name}\movement/' + move_animation
             self.movement_animations[move_animation] = import_folder(full_path)
 
     def get_player_distance_direction(self, player):
@@ -93,11 +96,11 @@ class Enemy(Entity):
 
     def actions(self, player):
         if self.action == 'attack':
-            if not self.timers['attack cooldown'].active:
-                print('attack')
-                self.timers['attack cooldown'].activate()
+            self.damage_player(self.damage, self.attack_type)
+
         elif self.action == 'move':
             self.direction = self.get_player_distance_direction(player)[1]
+
             if abs(self.direction.y) > abs(self.direction.x):
                 if self.direction.y > 0:
                     self.status = 'down'
@@ -113,8 +116,8 @@ class Enemy(Entity):
             self.status = 'down_idle'
             self.direction = pygame.math.Vector2()
 
-    def cooldown(self):
-        if self.timers['attack cooldown'].active:
+    def cooldowns(self):
+        if self.timers['attacked cooldown'].active:
             self.timers['one mil'].activate()
         if not self.can_attack:
             if not self.timers['one mil'].active:
@@ -129,7 +132,7 @@ class Enemy(Entity):
             self.direction = self.get_player_distance_direction(player)[1]
             if attack_type == 'attack':
                 self.health -= player.damage
-                self.timers['attack cooldown'].activate()
+                self.timers['attacked cooldown'].activate()
             self.vulnerable = False
 
     def check_death(self):
@@ -149,7 +152,7 @@ class Enemy(Entity):
         self.move(dt)
         self.animate(dt)
         self.update_timers()
-        self.cooldown()
+        self.cooldowns()
         self.check_death()
 
     def enemy_update(self, player):

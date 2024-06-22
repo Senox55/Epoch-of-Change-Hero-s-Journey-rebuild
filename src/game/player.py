@@ -1,3 +1,5 @@
+import sys
+
 import pygame
 import os
 from src.utils.settings import *
@@ -29,14 +31,17 @@ class Player(Entity):
         # collision
         self.collision_sprites = collision_sprites
 
-        # attack
+        # attack attributes
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
+        self.vulnerable = True
 
         # timer
         self.timers = {
             'tool use': Timer(TIME_ATTACKING, self.destroy_attack),
-            'tool switch': Timer(600)
+            'tool switch': Timer(600),
+            'attacked cooldown': Timer(600, self.activate_vulnerable),
+            'one mil': Timer(1)
         }
 
         # tools
@@ -80,6 +85,12 @@ class Player(Entity):
             if self.frame_index >= len(self.movement_animations[self.status]):
                 self.frame_index = 0
             self.image = self.movement_animations[self.status][int(self.frame_index)]
+
+        if not self.vulnerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -129,6 +140,18 @@ class Player(Entity):
         if self.timers['tool use'].active:
             self.status = self.status.split('_')[0] + '_' + self.selected_tool
 
+    def activate_vulnerable(self):
+        self.vulnerable = True
+
+    def cooldowns(self):
+        if not (self.timers['attacked cooldown'].active):
+            self.timers['attacked cooldown'].activate()
+
+    def check_death(self):
+        if self.health <= 0:
+            pygame.quit()
+            sys.exit()
+
     def update_timers(self):
         for timer in self.timers.values():
             timer.update()
@@ -137,6 +160,8 @@ class Player(Entity):
         self.input()
         self.update_timers()
         self.get_status()
+        self.cooldowns()
+        self.check_death()
 
         self.move(dt)
         self.animate(dt)
