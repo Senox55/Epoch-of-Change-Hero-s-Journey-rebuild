@@ -33,7 +33,7 @@ class Enemy(Entity):
         self.timers = {
             'attacked cooldown': Timer(TIME_ATTACKING),
             'one mil': Timer(1),
-            'death': Timer(600)
+            'death': Timer(1000)
         }
 
         # attack attributes

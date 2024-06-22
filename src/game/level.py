@@ -4,7 +4,7 @@ from src.game.player import Player
 from src.utils.timer import Timer
 from src.game.enemy import Enemy
 from src.game.overlay import Overlay
-from src.game.sprites import Generic, Tree, Bush
+from src.game.sprites import Generic, Tree, Bush, Coffin
 from src.game.attack import Attack
 from pytmx.util_pygame import load_pygame
 
@@ -34,10 +34,21 @@ class Level:
             pos = (x * TILESIZE, y * TILESIZE)
             Generic(pos, surf, 'ground', [self.all_sprites], LAYERS['ground'])
 
+        # blocks
+        for x, y, surf in tmx_data.get_layer_by_name('blocks').tiles():
+            pos = (x * TILESIZE, y * TILESIZE)
+            Generic(pos, surf, 'blocks', [self.all_sprites, self.collision_sprites])
+
+        # coffin
+        for obj in tmx_data.get_layer_by_name('props'):
+            pos = (obj.x, obj.y)
+            Coffin(pos, obj.image, 'coffin', groups=[self.all_sprites, self.collision_sprites])
+
         # bushes
         for obj in tmx_data.get_layer_by_name('bushes'):
             pos = (obj.x, obj.y)
-            Bush(pos, obj.image, 'bushes', groups=[self.all_sprites, self.collision_sprites, self.attackable_sprites])
+            Bush(pos, obj.image, 'bushes',
+                 groups=[self.all_sprites, self.collision_sprites])
 
         # entity
         for obj in tmx_data.get_layer_by_name('enemy'):

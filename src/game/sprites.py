@@ -22,3 +22,9 @@ class Bush(Generic):
     def __init__(self, pos, surf, sprite_type, groups):
         super().__init__(pos, surf, sprite_type, groups)
         self.hitbox = self.rect.copy().inflate(-30, -30)
+
+
+class Coffin(Generic):
+    def __init__(self, pos, surf, sprite_type, groups):
+        super().__init__(pos, surf, sprite_type, groups)
+        self.hitbox = self.rect.copy().inflate(-10, -10)
