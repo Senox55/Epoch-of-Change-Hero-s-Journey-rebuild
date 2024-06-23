@@ -61,7 +61,7 @@ class Level:
             self.player = Player(pos, self.all_sprites, self.collision_sprites, self.create_attack, self.destroy_attack)
 
     def create_attack(self):
-        self.current_attack = Attack(self.player, [self.attack_sprites])
+        self.current_attack = Attack(self.player, [self.attack_sprites, self.all_sprites])
 
     def destroy_attack(self):
         if self.current_attack:
@@ -71,9 +71,8 @@ class Level:
     def player_attack_logic(self):
         if self.attack_sprites:
             for attack_sprite in self.attack_sprites:
-                collision_sprites = pygame.sprite.spritecollide(attack_sprite, self.attackable_sprites, False)
-                if collision_sprites:
-                    for target_sprite in collision_sprites:
+                for target_sprite in self.attackable_sprites:
+                    if attack_sprite.rect.colliderect(target_sprite.hitbox):
                         if target_sprite.sprite_type == 'bushes':
                             target_sprite.kill()
                         elif target_sprite.sprite_type == 'enemy':
@@ -109,6 +108,11 @@ class CameraGroup(pygame.sprite.Group):
         self.offset.x = target.rect.centerx - (VIRTUAL_SCREEN_WIDTH // 2)
         self.offset.y = target.rect.centery - (VIRTUAL_SCREEN_HEIGHT // 2)
 
+    def draw_hitbox(self, sprite):
+        hitbox_rect = sprite.hitbox.copy()
+        hitbox_rect.center -= self.offset
+        pygame.draw.rect(self.virtual_surface, (255, 0, 0), hitbox_rect, 1)
+
     def custom_draw(self, player):
         self.center_target_camera(player)
         self.virtual_surface.fill(BLACK)
@@ -119,6 +123,9 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     self.virtual_surface.blit(sprite.image, offset_rect)
+                    if hasattr(sprite, 'hitbox'):
+                        self.draw_hitbox(sprite)
+
         scaled_surf = pygame.transform.scale(self.virtual_surface, self.current_size)
         self.display_surface.blit(scaled_surf, self.virtual_rect)
 

@@ -95,7 +95,7 @@
   <object id="53" gid="66" x="1329" y="1701" width="47" height="42"/>
  </objectgroup>
  <objectgroup id="5" name="player">
-  <object id="103" name="player" gid="67" x="544.728" y="1853.7" width="48" height="48"/>
+  <object id="103" name="player" gid="67" x="624.728" y="1853.7" width="48" height="48"/>
  </objectgroup>
  <objectgroup id="6" name="enemy">
   <object id="107" name="slime" gid="68" x="963.424" y="1497.94" width="32" height="32"/>

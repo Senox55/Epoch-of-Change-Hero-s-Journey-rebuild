@@ -19,7 +19,7 @@ class Player(Entity):
         self.status = 'down_idle'
         self.image = self.movement_animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.hitbox = pygame.Rect(self.rect.x + 1800, self.rect.y + 22, 13, 21)
+        self.hitbox = self.rect
         self.z = LAYERS['main']
 
         # movement attributes
@@ -38,10 +38,10 @@ class Player(Entity):
 
         # timer
         self.timers = {
-            'tool use': Timer(TIME_ATTACKING, self.destroy_attack),
+            'tool use': Timer(TIME_ATTACKING),
             'tool switch': Timer(600),
             'attacked cooldown': Timer(600, self.activate_vulnerable),
-            'one mil': Timer(1)
+            'one millisecond': Timer(1, self.destroy_attack)
         }
 
         # tools
@@ -50,7 +50,7 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 100, 'damage': 30, 'speed': 100}
+        self.stats = {'health': 1000, 'damage': 30, 'speed': 1000}
         self.health = self.stats['health'] - 30
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']
@@ -119,6 +119,7 @@ class Player(Entity):
             if keys[pygame.K_SPACE]:
                 self.create_attack()
                 self.timers['tool use'].activate()
+                self.timers['one millisecond'].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
 
