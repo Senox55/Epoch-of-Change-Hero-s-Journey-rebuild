@@ -50,7 +50,7 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 1000, 'damage': 30, 'speed': 1000}
+        self.stats = {'health': 1000, 'damage': 300, 'speed': 1000}
         self.health = self.stats['health'] - 30
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']
