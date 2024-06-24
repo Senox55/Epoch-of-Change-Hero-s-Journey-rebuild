@@ -61,7 +61,7 @@ class Level:
             self.player = Player(pos, self.all_sprites, self.collision_sprites, self.create_attack, self.destroy_attack)
 
     def create_attack(self):
-        self.current_attack = Attack(self.player, [self.attack_sprites, self.all_sprites])
+        self.current_attack = Attack(self.player, [self.attack_sprites])
 
     def destroy_attack(self):
         if self.current_attack:
@@ -123,8 +123,8 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     self.virtual_surface.blit(sprite.image, offset_rect)
-                    if hasattr(sprite, 'hitbox'):
-                        self.draw_hitbox(sprite)
+                    # if hasattr(sprite, 'hitbox'):
+                    #     self.draw_hitbox(sprite)
 
         scaled_surf = pygame.transform.scale(self.virtual_surface, self.current_size)
         self.display_surface.blit(scaled_surf, self.virtual_rect)

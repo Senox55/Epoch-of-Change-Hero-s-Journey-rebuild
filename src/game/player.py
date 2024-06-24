@@ -19,7 +19,7 @@ class Player(Entity):
         self.status = 'down_idle'
         self.image = self.movement_animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.hitbox = self.rect
+        self.hitbox = self.rect.inflate(-30, -20)
         self.z = LAYERS['main']
 
         # movement attributes
@@ -50,7 +50,7 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 1000, 'damage': 300, 'speed': 1000}
+        self.stats = {'health': 100, 'damage': 30, 'speed': 100}
         self.health = self.stats['health'] - 30
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']

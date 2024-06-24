@@ -23,11 +23,11 @@ class Attack(pygame.sprite.Sprite):
 
         # placement
         if self.direction == 'right':
-            self.rect = self.image.get_rect(midleft=player.hitbox.midright + pygame.math.Vector2(0, 14))
+            self.rect = self.image.get_rect(midleft=player.rect.midright + pygame.math.Vector2(-30, 14))
         elif self.direction == 'left':
-            self.rect = self.image.get_rect(midright=player.hitbox.midleft + pygame.math.Vector2(30, 14))
+            self.rect = self.image.get_rect(midright=player.rect.midleft + pygame.math.Vector2(30, 14))
         elif self.direction == 'down':
-            self.rect = self.image.get_rect(midtop=player.hitbox.midbottom + pygame.math.Vector2(0, -20))
+            self.rect = self.image.get_rect(midtop=player.rect.midbottom + pygame.math.Vector2(0, -20))
         else:
-            self.rect = self.image.get_rect(midbottom=player.hitbox.midtop + pygame.math.Vector2(0, 40))
+            self.rect = self.image.get_rect(midbottom=player.rect.midtop + pygame.math.Vector2(0, 40))
 
