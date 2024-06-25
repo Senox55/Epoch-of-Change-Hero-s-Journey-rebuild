@@ -14,8 +14,10 @@ HEALTH_BAR_HEIGHT = 20
 ENERGY_BAR_WIDTH = 100
 ENERGY_BAR_HEIGHT = 20
 ITEM_BOX_SIZE = 80
+MAGIC_BOX_SIZE = 80
 OVERLAY_POSITIONS = {
-    'tool': (40, SCREEN_HEIGHT - 15)
+    'tool': (40, SCREEN_HEIGHT - 15),
+    'magic': (108, SCREEN_HEIGHT - 11)
 }
 
 # layers
@@ -70,3 +72,13 @@ MENU_POSITIONS = {
     'win': (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 300),
     'restart_after_win': (SCREEN_WIDTH // 2 - 300, SCREEN_HEIGHT // 2)
 }
+
+# weapons
+weapons_data = {'katana': {'damage': 30, 'attack_type': 'splash'},
+                'simple_sword': {'damage': 15, 'attack_type': 'splash'}
+                }
+
+# magics
+magics_data = {'heal': {'style': 'heal', 'strength': 40, 'cost': 10},
+               'flame': {'style': 'flame', 'strength': 40, 'cost': 10},
+               }

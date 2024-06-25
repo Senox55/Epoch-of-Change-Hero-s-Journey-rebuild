@@ -14,8 +14,11 @@ class Overlay:
 
         # imports
         overlay_path = r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\overlay/'
-        self.tools_surf = {tool: pygame.image.load(f'{overlay_path}{tool}.png').convert_alpha() for tool in
-                           player.tools}
+        self.weapons_surf = {tool: pygame.image.load(f'{overlay_path}{tool}.png').convert_alpha() for tool in
+                             player.weapons}
+
+        self.magics_surf = {magic: pygame.image.load(f'{overlay_path}{magic}.png').convert_alpha() for magic in
+                           player.magics}
 
     def show_bar(self, current, max_amount, bg_rect, colour):
         # draw bg
@@ -31,8 +34,8 @@ class Overlay:
         pygame.draw.rect(self.display_surface, colour, current_rect)
         pygame.draw.rect(self.display_surface, OVERLAY_BORDER_COLOR, bg_rect, 4)
 
-    def selection_box(self, position):
-        bg_rect = pygame.Rect(position, (ITEM_BOX_SIZE, ITEM_BOX_SIZE))
+    def selection_box(self, position, size):
+        bg_rect = pygame.Rect(position, (size, size))
         pygame.draw.rect(self.display_surface, OVERLAY_BG_COLOR, bg_rect)
         pygame.draw.rect(self.display_surface, OVERLAY_BORDER_COLOR, bg_rect, 3)
 
@@ -40,10 +43,15 @@ class Overlay:
         # bars
         self.show_bar(self.player.health, self.player.stats['health'], self.health_bar_rect, HEALTH_COLOR)
         self.show_bar(self.player.energy, self.player.stats['energy'], self.energy_bar_rect, ENERGY_COLOR)
-        self.selection_box((32, SCREEN_HEIGHT - ITEM_BOX_SIZE - 7))
-
+        self.selection_box((32, SCREEN_HEIGHT - ITEM_BOX_SIZE - 7), ITEM_BOX_SIZE)
+        self.selection_box((100, SCREEN_HEIGHT - MAGIC_BOX_SIZE - 3), MAGIC_BOX_SIZE)
 
         # tools
-        tool_surf = self.tools_surf[self.player.selected_tool]
-        tool_rect = tool_surf.get_rect(bottomleft=OVERLAY_POSITIONS['tool'])
-        self.display_surface.blit(tool_surf, tool_rect)
+        weapon_surf = self.weapons_surf[self.player.weapon]
+        weapon_rect = weapon_surf.get_rect(bottomleft=OVERLAY_POSITIONS['tool'])
+        self.display_surface.blit(weapon_surf, weapon_rect)
+
+        # magics
+        magic_surf = self.magics_surf[self.player.magic]
+        magic_rect = magic_surf.get_rect(bottomleft=OVERLAY_POSITIONS['magic'])
+        self.display_surface.blit(magic_surf, magic_rect)

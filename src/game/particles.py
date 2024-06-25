@@ -8,7 +8,7 @@ class AnimationPlayer:
     def __init__(self):
         self.frames = {
             # magic
-            'fire': import_folder(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\particles/fire'),
+            'flame': import_folder(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\particles/fire'),
             'heal': import_folder(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\particles/heal')
         }
 
@@ -24,6 +24,7 @@ class ParticleEffect(pygame.sprite.Sprite):
     def __init__(self, pos, animation_frames, groups):
         super().__init__(groups)
         self.frame_index = 0
+        self.sprite_type = 'magic'
         self.animation_speed = 15
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]

@@ -153,9 +153,13 @@ class Enemy(Entity):
     def get_damage(self, player, attack_type):
         if self.vulnerable:
             self.direction = self.get_player_distance_direction(player)[1]
-            if attack_type == 'attack':
-                self.health -= player.damage
-                self.timers['attacked cooldown'].activate()
+            if attack_type == 'weapon':
+                self.health -= player.get_full_weapon_damage()
+
+            elif attack_type == 'magic':
+                self.health -= player.get_full_magic_damage()
+
+            self.timers['attacked cooldown'].activate()
             self.vulnerable = False
 
     def check_death(self):

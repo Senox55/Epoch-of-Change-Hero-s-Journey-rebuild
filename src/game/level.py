@@ -4,7 +4,7 @@ from src.game.player import Player
 from src.game.enemy import Enemy
 from src.game.overlay import Overlay
 from src.game.sprites import Generic, Tree, Bush, Coffin, Finish
-from src.game.attack import Attack
+from src.game.weapon import Weapon
 from src.game.magic import MagicPlayer
 from src.game.particles import AnimationPlayer
 from pytmx.util_pygame import load_pygame
@@ -74,14 +74,14 @@ class Level:
                                  self.create_magic)
 
     def create_attack(self):
-        self.current_attack = Attack(self.player, [self.attack_sprites])
+        self.current_attack = Weapon(self.player, [self.attack_sprites])
 
     def create_magic(self, style, strength, cost):
         if style == 'heal':
             self.magic_player.heal(self.player, strength, cost, [self.all_sprites])
 
-        if style == 'fire':
-            pass
+        if style == 'flame':
+            self.magic_player.flame(self.player, cost, [self.all_sprites, self.attack_sprites])
 
     def destroy_attack(self):
         if self.current_attack:

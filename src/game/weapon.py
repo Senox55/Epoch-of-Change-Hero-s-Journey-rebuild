@@ -2,12 +2,12 @@ import pygame
 from src.utils.settings import *
 
 
-class Attack(pygame.sprite.Sprite):
+class Weapon(pygame.sprite.Sprite):
     def __init__(self, player, groups, z=LAYERS['main']):
 
         # general setup
         super().__init__(groups)
-        self.sprite_type = 'attack'
+        self.sprite_type = 'weapon'
         self.direction = player.status.split('_')[0]
         self.z = z
 

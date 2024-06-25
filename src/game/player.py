@@ -43,16 +43,22 @@ class Player(Entity):
             'tool switch': Timer(600),
             'attacked cooldown': Timer(600, self.activate_vulnerable),
             'one millisecond': Timer(1, self.destroy_attack),
-            'magic use': Timer(TIME_HEALING)
+            'magic use': Timer(TIME_HEALING),
+            'magic switch': Timer(600)
         }
 
-        # tools
-        self.tools = ['katana', 'simple_sword']
-        self.tool_index = 0
-        self.selected_tool = self.tools[self.tool_index]
+        # weapon
+        self.weapons = weapons_data
+        self.weapon_index = 0
+        self.weapon = list(weapons_data.keys())[self.weapon_index]
+
+        # magic
+        self.magics = magics_data
+        self.magic_index = 0
+        self.magic = list(magics_data.keys())[self.magic_index]
 
         # stats
-        self.stats = {'health': 100, 'damage': 30, 'speed': 100, 'energy': 50}
+        self.stats = {'health': 100, 'damage': 2, 'speed': 100, 'energy': 50}
         self.health = self.stats['health']
         self.energy = self.stats['energy']
         self.damage = self.stats['damage']
@@ -95,6 +101,16 @@ class Player(Entity):
         else:
             self.image.set_alpha(255)
 
+    def get_full_weapon_damage(self):
+        base_damage = self.stats['damage']
+        weapon_damage = self.weapons[self.weapon]['damage']
+        return base_damage + weapon_damage
+
+    def get_full_magic_damage(self):
+        base_damage = self.stats['damage']
+        magic_damage = self.magics[self.magic]['strength']
+        return base_damage + magic_damage
+
     def input(self):
         keys = pygame.key.get_pressed()
 
@@ -126,20 +142,29 @@ class Player(Entity):
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
 
-            # change tool
+            # switch tool
             if keys[pygame.K_q] and not self.timers['tool switch'].active:
                 self.timers['tool switch'].activate()
-                self.tool_index += 1
-                if self.tool_index >= len(self.tools):
-                    self.tool_index = 0
-                self.selected_tool = self.tools[self.tool_index]
+                self.weapon_index += 1
+                if self.weapon_index >= len(self.weapons):
+                    self.weapon_index = 0
+                self.weapon = list(weapons_data.keys())[self.weapon_index]
 
+            # use magic
             if keys[pygame.K_f]:
-                self.create_magic('heal', 40, 10)
+                self.create_magic(*self.magics[self.magic].values())
                 self.timers['magic use'].activate()
                 self.timers['one millisecond'].activate()
                 self.direction = pygame.math.Vector2()
                 self.frame_index = 0
+
+            # switch magic
+            if keys[pygame.K_z] and not self.timers['magic switch'].active:
+                self.timers['magic switch'].activate()
+                self.magic_index += 1
+                if self.magic_index >= len(self.magics):
+                    self.magic_index = 0
+                self.magic = list(magics_data.keys())[self.magic_index]
 
     def get_status(self):
 
@@ -149,7 +174,7 @@ class Player(Entity):
 
         # tool use
         if self.timers['tool use'].active:
-            self.status = self.status.split('_')[0] + '_' + self.selected_tool
+            self.status = self.status.split('_')[0] + '_' + self.weapon
 
     def activate_vulnerable(self):
         self.vulnerable = True
