@@ -10,6 +10,7 @@ class Overlay:
 
         # bar setop
         self.health_bar_rect = pygame.Rect(10, 10, HEALTH_BAR_WIDTH, HEALTH_BAR_HEIGHT)
+        self.energy_bar_rect = pygame.Rect(10, 35, ENERGY_BAR_WIDTH, ENERGY_BAR_HEIGHT)
 
         # imports
         overlay_path = r'..\Epoch-of-Change-Hero-s-Journey-rebuild\assets\overlay/'
@@ -38,7 +39,9 @@ class Overlay:
     def display(self):
         # bars
         self.show_bar(self.player.health, self.player.stats['health'], self.health_bar_rect, HEALTH_COLOR)
+        self.show_bar(self.player.energy, self.player.stats['energy'], self.energy_bar_rect, ENERGY_COLOR)
         self.selection_box((32, SCREEN_HEIGHT - ITEM_BOX_SIZE - 7))
+
 
         # tools
         tool_surf = self.tools_surf[self.player.selected_tool]

@@ -5,6 +5,8 @@ from src.game.enemy import Enemy
 from src.game.overlay import Overlay
 from src.game.sprites import Generic, Tree, Bush, Coffin, Finish
 from src.game.attack import Attack
+from src.game.magic import MagicPlayer
+from src.game.particles import AnimationPlayer
 from pytmx.util_pygame import load_pygame
 
 
@@ -25,6 +27,10 @@ class Level:
 
         self.setup()
         self.overlay = Overlay(self.player)
+
+        # particles
+        self.animation_player = AnimationPlayer()
+        self.magic_player = MagicPlayer(self.animation_player)
 
     def setup(self):
         tmx_data = load_pygame(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\data\map.tmx')
@@ -48,7 +54,7 @@ class Level:
         for obj in tmx_data.get_layer_by_name('bushes'):
             pos = (obj.x, obj.y)
             Bush(pos, obj.image, 'bushes',
-                 groups=[self.all_sprites, self.collision_sprites, self.attackable_sprites])
+                 groups=[self.all_sprites, self.collision_sprites])
 
         # entity
         for obj in tmx_data.get_layer_by_name('enemy'):
@@ -64,10 +70,18 @@ class Level:
         # player
         for obj in tmx_data.get_layer_by_name('player'):
             pos = (obj.x, obj.y)
-            self.player = Player(pos, self.all_sprites, self.collision_sprites, self.create_attack, self.destroy_attack)
+            self.player = Player(pos, self.all_sprites, self.collision_sprites, self.create_attack, self.destroy_attack,
+                                 self.create_magic)
 
     def create_attack(self):
         self.current_attack = Attack(self.player, [self.attack_sprites])
+
+    def create_magic(self, style, strength, cost):
+        if style == 'heal':
+            self.magic_player.heal(self.player, strength, cost, [self.all_sprites])
+
+        if style == 'fire':
+            pass
 
     def destroy_attack(self):
         if self.current_attack:
@@ -106,7 +120,6 @@ class Level:
         for finish_sprite in self.finish_sptites:
             if self.player.hitbox.colliderect(finish_sprite.hitbox):
                 return True
-
 
 
 class CameraGroup(pygame.sprite.Group):

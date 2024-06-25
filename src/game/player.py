@@ -9,7 +9,7 @@ from src.game.entity import Entity
 
 
 class Player(Entity):
-    def __init__(self, pos, groups, collision_sprites, create_attack, destroy_attack):
+    def __init__(self, pos, groups, collision_sprites, create_attack, destroy_attack, create_magic):
 
         # general setup
         super().__init__(groups)
@@ -34,6 +34,7 @@ class Player(Entity):
         # attack attributes
         self.create_attack = create_attack
         self.destroy_attack = destroy_attack
+        self.create_magic = create_magic
         self.vulnerable = True
 
         # timer
@@ -41,7 +42,8 @@ class Player(Entity):
             'tool use': Timer(TIME_ATTACKING),
             'tool switch': Timer(600),
             'attacked cooldown': Timer(600, self.activate_vulnerable),
-            'one millisecond': Timer(1, self.destroy_attack)
+            'one millisecond': Timer(1, self.destroy_attack),
+            'magic use': Timer(TIME_HEALING)
         }
 
         # tools
@@ -50,8 +52,9 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 10000, 'damage': 30, 'speed': 100}
-        self.health = self.stats['health'] - 30
+        self.stats = {'health': 100, 'damage': 30, 'speed': 100, 'energy': 100}
+        self.health = self.stats['health']
+        self.energy = self.stats['energy']
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']
 
@@ -95,7 +98,7 @@ class Player(Entity):
     def input(self):
         keys = pygame.key.get_pressed()
 
-        if not self.timers['tool use'].active:
+        if not self.timers['tool use'].active and not self.timers['magic use'].active:
             # directions
             if keys[pygame.K_w]:
                 self.direction.y = -1
@@ -130,6 +133,13 @@ class Player(Entity):
                 if self.tool_index >= len(self.tools):
                     self.tool_index = 0
                 self.selected_tool = self.tools[self.tool_index]
+
+            if keys[pygame.K_f]:
+                self.create_magic('heal', 10, 10)
+                self.timers['magic use'].activate()
+                self.timers['one millisecond'].activate()
+                self.direction = pygame.math.Vector2()
+                self.frame_index = 0
 
     def get_status(self):
 
