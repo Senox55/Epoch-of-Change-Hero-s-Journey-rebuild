@@ -32,6 +32,10 @@ class Level:
         self.animation_player = AnimationPlayer()
         self.magic_player = MagicPlayer(self.animation_player)
 
+        #sound
+        self.player_damaged_sound = pygame.mixer.Sound(
+            r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\damaged\player_damaged.wav')
+
     def setup(self):
         tmx_data = load_pygame(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\data\map.tmx')
 
@@ -100,6 +104,7 @@ class Level:
 
     def damage_player(self, amount, attack_type):
         if self.player.vulnerable:
+            self.player_damaged_sound.play()
             self.player.health -= amount
             self.player.vulnerable = False
 
@@ -111,11 +116,6 @@ class Level:
         self.player_attack_logic()
 
         self.overlay.display()
-
-    # def cleanup(self):
-    #     # Stop sounds, clear sprites, and any other cleanup tasks
-    #     self.sound.stop()
-    #     self.sprites.empty()
 
     def finish_player_death(self):
         if self.player.check_death():

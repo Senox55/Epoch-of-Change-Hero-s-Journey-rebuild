@@ -65,7 +65,8 @@ class Player(Entity):
         self.speed = self.stats['speed']
 
         # import sounds
-        self.weapon_attack_sound = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\attack\sword.wav')
+        self.weapon_attack_sound = pygame.mixer.Sound(
+            r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\attack\sword.wav')
         self.weapon_attack_sound.set_volume(0.4)
 
 
