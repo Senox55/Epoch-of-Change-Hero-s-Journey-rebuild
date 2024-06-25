@@ -56,7 +56,7 @@ SECOND_TO_MILLISECOND = 1000
 monster_data = {
     'slime': {'health': 100, 'damage': 10, 'speed': 30, 'attack_radius': 1, 'notice_radius': 400, 'repulsion': 1,
               'attack_type': 'splash', 'hitbox': {'x': 8, 'y': 13, 'width': 16, 'height': 10}, 'exp': 10},
-    'giant_slime': {'health': 500, 'damage': 20, 'speed': 50, 'attack_radius': 100, 'notice_radius': 400,
+    'giant_slime': {'health': 700, 'damage': 20, 'speed': 60, 'attack_radius': 100, 'notice_radius': 1500,
                     'repulsion': 1,
                     'attack_type': 'splash', 'hitbox': {'x': 80, 'y': 130, 'width': 160, 'height': 100}, 'exp': 100}
 }

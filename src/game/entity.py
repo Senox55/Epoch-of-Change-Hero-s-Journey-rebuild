@@ -19,6 +19,7 @@ class Entity(pygame.sprite.Sprite):
         for sprite in self.collision_sprites:
             if hasattr(sprite, 'hitbox'):
                 if sprite.hitbox.colliderect(self.hitbox):
+
                     if direction == 'horizontal':
                         if self.direction.x > 0:  # moving right
                             self.hitbox.right = sprite.hitbox.left
@@ -26,6 +27,7 @@ class Entity(pygame.sprite.Sprite):
                             self.hitbox.left = sprite.hitbox.right
                         self.rect.centerx = self.hitbox.centerx
                         self.pos.x = self.hitbox.centerx
+
                     if direction == 'vertical':
                         if self.direction.y > 0:  # moving bottom
                             self.hitbox.bottom = sprite.hitbox.top
