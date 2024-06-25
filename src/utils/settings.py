@@ -27,7 +27,11 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREY = (128, 128, 128)
+GREEN = (0, 255, 0)
+GREY_GREEN = (23, 114, 69)
 DARK_GREY = (96, 96, 96)
+LIGHT_BLUE = (175, 238, 238)
+GREY_BLUE = (81, 183, 183)
 
 # overlay colors
 HEALTH_COLOR = 'red'
@@ -54,5 +58,8 @@ START_BUTTON_WIDTH = 200
 START_BUTTON_HEIGHT = 100
 MENU_POSITIONS = {
     'start': (SCREEN_WIDTH // 2 - 300, SCREEN_HEIGHT // 2),
-    'exit': (SCREEN_WIDTH // 2 + 300, SCREEN_HEIGHT // 2)
+    'exit': (SCREEN_WIDTH // 2 + 300, SCREEN_HEIGHT // 2),
+    'restart': (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 200),
+    'win': (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 - 300),
+    'restart_after_win': (SCREEN_WIDTH // 2 - 300, SCREEN_HEIGHT // 2)
 }

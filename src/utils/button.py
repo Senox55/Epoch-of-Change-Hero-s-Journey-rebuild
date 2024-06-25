@@ -1,10 +1,9 @@
 import pygame
 
 
-class Button():
-    def __init__(self, name, pos, image):
+class Button:
+    def __init__(self, pos, image):
         self.image = image
-        self.name = name
         self.rect = self.image.get_rect(center=pos)
         self.clicked = False
 
@@ -17,3 +16,9 @@ class Button():
         if self.rect.collidepoint(mouse_pos):
             if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:
                 self.clicked = True
+
+            if pygame.mouse.get_pressed()[0] == 0:
+                self.clicked = False
+
+    def enable(self):
+        self.clicked = False

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="80" height="70" tilewidth="32" tileheight="32" infinite="0" nextlayerid="10" nextobjectid="151">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="80" height="70" tilewidth="32" tileheight="32" infinite="0" nextlayerid="11" nextobjectid="159">
  <tileset firstgid="1" source="tilesets/grass.tsx"/>
  <tileset firstgid="65" source="tilesets/plants.tsx"/>
  <tileset firstgid="67" source="tilesets/player.tsx"/>
@@ -7,6 +7,7 @@
  <tileset firstgid="75" source="tilesets/blocks.tsx"/>
  <tileset firstgid="139" source="tilesets/props.tsx"/>
  <tileset firstgid="140" source="tilesets/water.tsx"/>
+ <tileset firstgid="188" source="tilesets/finish.tsx"/>
  <layer id="1" name="ground" width="80" height="70">
   <data encoding="csv">
 171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,171,168,168,168,168,168,
@@ -96,6 +97,9 @@
  </objectgroup>
  <objectgroup id="5" name="player">
   <object id="103" name="player" gid="67" x="624.728" y="1853.7" width="48" height="48"/>
+ </objectgroup>
+ <objectgroup id="10" name="finish">
+  <object id="158" name="finish" gid="189" x="1408.67" y="320.667" width="32" height="32"/>
  </objectgroup>
  <objectgroup id="6" name="enemy">
   <object id="107" name="slime" gid="68" x="963.424" y="1497.94" width="32" height="32"/>

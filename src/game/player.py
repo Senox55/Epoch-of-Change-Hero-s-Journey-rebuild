@@ -50,7 +50,7 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 100, 'damage': 30, 'speed': 100}
+        self.stats = {'health': 10000, 'damage': 30, 'speed': 100}
         self.health = self.stats['health'] - 30
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']
@@ -150,8 +150,7 @@ class Player(Entity):
 
     def check_death(self):
         if self.health <= 0:
-            pygame.quit()
-            sys.exit()
+            return True
 
     def update_timers(self):
         for timer in self.timers.values():

@@ -3,7 +3,7 @@ from src.utils.settings import *
 from src.game.player import Player
 from src.game.enemy import Enemy
 from src.game.overlay import Overlay
-from src.game.sprites import Generic, Tree, Bush, Coffin
+from src.game.sprites import Generic, Tree, Bush, Coffin, Finish
 from src.game.attack import Attack
 from pytmx.util_pygame import load_pygame
 
@@ -20,6 +20,7 @@ class Level:
         # attack sprites
         self.current_attack = None
         self.attack_sprites = pygame.sprite.Group()
+        self.finish_sptites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
 
         self.setup()
@@ -54,6 +55,11 @@ class Level:
             pos = (obj.x, obj.y)
             Enemy(obj.name, pos, [self.all_sprites, self.attackable_sprites], self.collision_sprites,
                   self.damage_player)
+
+        # finish
+        for obj in tmx_data.get_layer_by_name('finish'):
+            pos = (obj.x, obj.y)
+            Finish(pos, obj.image, obj.name, [self.finish_sptites])
 
         # player
         for obj in tmx_data.get_layer_by_name('player'):
@@ -92,6 +98,16 @@ class Level:
 
         self.overlay.display()
 
+    def finish_player_death(self):
+        if self.player.check_death():
+            return True
+
+    def finish_win(self):
+        for finish_sprite in self.finish_sptites:
+            if self.player.hitbox.colliderect(finish_sprite.hitbox):
+                return True
+
+
 
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
@@ -123,8 +139,8 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     self.virtual_surface.blit(sprite.image, offset_rect)
-                    # if hasattr(sprite, 'hitbox'):
-                    #     self.draw_hitbox(sprite)
+                    if hasattr(sprite, 'hitbox'):
+                        self.draw_hitbox(sprite)
 
         scaled_surf = pygame.transform.scale(self.virtual_surface, self.current_size)
         self.display_surface.blit(scaled_surf, self.virtual_rect)
