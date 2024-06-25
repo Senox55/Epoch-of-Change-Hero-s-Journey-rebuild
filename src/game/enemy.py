@@ -8,7 +8,7 @@ from src.utils.support import *
 
 
 class Enemy(Entity):
-    def __init__(self, monster_name, pos, groups, collision_sprites, damage_player):
+    def __init__(self, monster_name, pos, groups, collision_sprites, damage_player, add_exp):
         # general setup
         super().__init__(groups)
         self.sprite_type = 'enemy'
@@ -60,9 +60,13 @@ class Enemy(Entity):
         self.attack_radius = monster_data[monster_name]['attack_radius']
         self.notice_radius = monster_data[monster_name]['notice_radius']
         self.repulsion = monster_data[monster_name]['repulsion']
+        self.exp = monster_data[monster_name]['exp']
 
         # death attributes
         self.death = False
+
+        # exp attributes
+        self.add_exp = add_exp
 
         # import sounds
         self.death_sound = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\death\slime_death.wav')
@@ -175,6 +179,7 @@ class Enemy(Entity):
                 self.timers['death'].activate()
                 self.frame_index = 0
                 self.death_sound.play()
+                self.add_exp(self.exp)
 
             return True
 

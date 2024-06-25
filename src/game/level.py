@@ -7,6 +7,7 @@ from src.game.sprites import Generic, Tree, Bush, Coffin, Finish
 from src.game.weapon import Weapon
 from src.game.magic import MagicPlayer
 from src.game.particles import AnimationPlayer
+from src.utils.text import Text
 from pytmx.util_pygame import load_pygame
 
 
@@ -32,9 +33,24 @@ class Level:
         self.animation_player = AnimationPlayer()
         self.magic_player = MagicPlayer(self.animation_player)
 
-        #sound
+        # menu
+        self.game_paused = False
+
+        # win
+        self.win = False
+
+        # texts
+        self.texts = {
+            'YOU NEED 100 EXP :)': Text(TEXTS_POSITIONS['warn_about_exp'], 50, 'YOU NEED 100 EXP :)', WHITE,
+                                        [self.all_sprites],
+                                        z=LAYERS['text'])}
+
+        # sound
         self.player_damaged_sound = pygame.mixer.Sound(
             r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\damaged\player_damaged.wav')
+
+        self.win_sound = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\win\win.wav')
+        self.win_sound.set_volume(0.8)
 
     def setup(self):
         tmx_data = load_pygame(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\data\map.tmx')
@@ -64,12 +80,12 @@ class Level:
         for obj in tmx_data.get_layer_by_name('enemy'):
             pos = (obj.x, obj.y)
             Enemy(obj.name, pos, [self.all_sprites, self.attackable_sprites], self.collision_sprites,
-                  self.damage_player)
+                  self.damage_player, self.add_exp)
 
         # finish
         for obj in tmx_data.get_layer_by_name('finish'):
             pos = (obj.x, obj.y)
-            Finish(pos, obj.image, obj.name, [self.finish_sptites])
+            Finish(pos, obj.image, obj.name, [self.finish_sptites, self.collision_sprites])
 
         # player
         for obj in tmx_data.get_layer_by_name('player'):
@@ -92,6 +108,10 @@ class Level:
             self.current_attack.kill()
         self.current_attack = None
 
+    def toggle_menu(self):
+
+        self.game_paused = not self.game_paused
+
     def player_attack_logic(self):
         if self.attack_sprites:
             for attack_sprite in self.attack_sprites:
@@ -109,13 +129,22 @@ class Level:
             self.player.vulnerable = False
 
     def run(self, dt):
-        self.display_surface.fill(BLACK)
-        self.all_sprites.custom_draw(self.player)
-        self.all_sprites.update(dt)
-        self.all_sprites.enemy_update(self.player)
-        self.player_attack_logic()
+        if self.game_paused:
+            font = pygame.font.Font(None, 128)
+            text = font.render("PAUSED", True, BLACK)
+            text_rect = text.get_rect(center=MENU_POSITIONS['win'])
+            self.display_surface.blit(text, text_rect)
+        else:
+            self.display_surface.fill(BLACK)
+            self.all_sprites.custom_draw(self.player)
+            self.all_sprites.update(dt)
+            self.all_sprites.enemy_update(self.player)
+            self.player_attack_logic()
 
-        self.overlay.display()
+            self.overlay.display()
+
+    def add_exp(self, amount):
+        self.player.exp += amount
 
     def finish_player_death(self):
         if self.player.check_death():
@@ -123,8 +152,11 @@ class Level:
 
     def finish_win(self):
         for finish_sprite in self.finish_sptites:
-            if self.player.hitbox.colliderect(finish_sprite.hitbox):
-                return True
+            if self.player.hitbox.colliderect(finish_sprite.rect):
+                if self.player.exp >= 100 and not self.win:
+                    self.win = True
+                    self.win_sound.play()
+                    return True
 
 
 class CameraGroup(pygame.sprite.Group):

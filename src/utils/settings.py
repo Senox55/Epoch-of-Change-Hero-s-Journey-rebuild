@@ -15,6 +15,9 @@ ENERGY_BAR_WIDTH = 100
 ENERGY_BAR_HEIGHT = 20
 ITEM_BOX_SIZE = 80
 MAGIC_BOX_SIZE = 80
+EXP_BOX_WIDTH = 80
+EXP_BOX_HEIGHT = 30
+EXP_TEXT_SIZE = 30
 OVERLAY_POSITIONS = {
     'tool': (40, SCREEN_HEIGHT - 15),
     'magic': (108, SCREEN_HEIGHT - 11)
@@ -23,7 +26,8 @@ OVERLAY_POSITIONS = {
 # layers
 LAYERS = {
     'ground': 0,
-    'main': 1
+    'main': 1,
+    'text': 2,
 }
 
 # general colours
@@ -40,6 +44,7 @@ GREY_BLUE = (81, 183, 183)
 
 # overlay colors
 HEALTH_COLOR = RED
+TEXT_COLOR = BLACK
 ENERGY_COLOR = BLUE
 OVERLAY_BORDER_COLOR = BLACK
 OVERLAY_BG_COLOR = DARK_GREY
@@ -50,10 +55,10 @@ SECOND_TO_MILLISECOND = 1000
 # enemy
 monster_data = {
     'slime': {'health': 100, 'damage': 10, 'speed': 30, 'attack_radius': 1, 'notice_radius': 400, 'repulsion': 1,
-              'attack_type': 'splash', 'hitbox': {'x': 8, 'y': 13, 'width': 16, 'height': 10}},
+              'attack_type': 'splash', 'hitbox': {'x': 8, 'y': 13, 'width': 16, 'height': 10}, 'exp': 10},
     'giant_slime': {'health': 500, 'damage': 20, 'speed': 50, 'attack_radius': 100, 'notice_radius': 400,
                     'repulsion': 1,
-                    'attack_type': 'splash', 'hitbox': {'x': 80, 'y': 130, 'width': 160, 'height': 100}}
+                    'attack_type': 'splash', 'hitbox': {'x': 80, 'y': 130, 'width': 160, 'height': 100}, 'exp': 100}
 }
 
 # attack attributes
@@ -82,3 +87,8 @@ weapons_data = {'katana': {'damage': 30, 'attack_type': 'splash'},
 magics_data = {'heal': {'style': 'heal', 'strength': 40, 'cost': 10},
                'flame': {'style': 'flame', 'strength': 40, 'cost': 10},
                }
+
+# texts
+TEXTS_POSITIONS = {
+    'warn_about_exp': (SCREEN_WIDTH // 2 + 300, SCREEN_HEIGHT // 2 - 300)
+}

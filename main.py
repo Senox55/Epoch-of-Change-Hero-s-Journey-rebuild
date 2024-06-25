@@ -17,11 +17,14 @@ class Game:
                         'restart': Button(MENU_POSITIONS['restart'], self.buttons_images['restart'])}
         self.current_screen = 'start_menu'
 
-        #sound
-        main_sound_1 = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\background\menu.wav')
-        main_sound_2 = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\background\level1.wav')
-        main_sound_1.play(loops=-1)
-        main_sound_2.play(loops=-1)
+        # sound
+        self.main_sound_1 = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\background\menu.wav')
+        self.main_sound_2 = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\background\level1.wav')
+
+        self.main_sound_1.play(loops=-1)
+        self.main_sound_2.play(loops=-1)
+
+        self.click_button_sound = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\button\click_button.wav')
 
     def import_assets(self):
         self.buttons_images = {'start': None, 'exit': None, 'restart': None}
@@ -38,11 +41,11 @@ class Game:
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
-                    pygame.quit()
-                    sys.exit()
+                    self.level.toggle_menu()
 
             for name, button in self.buttons.items():
                 if button.clicked:
+                    self.click_button_sound.play()
                     if name == 'start' or name == 'restart':
                         self.level = Level()
                         self.current_screen = 'level'
@@ -62,7 +65,9 @@ class Game:
         self.level.run(dt)
 
     def run_death_screen(self):
-        self.buttons['restart'].draw(self.screen)
+        self.screen.fill(GREY_GREEN)
+        self.buttons['start'].draw(self.screen)
+        self.buttons['exit'].draw(self.screen)
 
     def run_win_screen(self):
         self.screen.fill(GREY_GREEN)

@@ -58,17 +58,21 @@ class Player(Entity):
         self.magic = list(magics_data.keys())[self.magic_index]
 
         # stats
-        self.stats = {'health': 100, 'damage': 2, 'speed': 100, 'energy': 50}
+        self.stats = {'health': 100, 'damage': 2, 'speed': 100, 'energy': 50, 'exp': 0}
         self.health = self.stats['health']
         self.energy = self.stats['energy']
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']
+        self.exp = self.stats['exp']
+        self.death = False
 
         # import sounds
         self.weapon_attack_sound = pygame.mixer.Sound(
             r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\attack\sword.wav')
         self.weapon_attack_sound.set_volume(0.4)
 
+        self.player_death_sound = pygame.mixer.Sound(
+            r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\death\player_death.wav')
 
     def import_assets(self):
         self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
@@ -191,7 +195,9 @@ class Player(Entity):
             self.timers['attacked cooldown'].activate()
 
     def check_death(self):
-        if self.health <= 0:
+        if self.health <= 0 and not self.death:
+            self.player_death_sound.play()
+            self.death = True
             return True
 
     def update_timers(self):
