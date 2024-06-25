@@ -64,6 +64,11 @@ class Player(Entity):
         self.damage = self.stats['damage']
         self.speed = self.stats['speed']
 
+        # import sounds
+        self.weapon_attack_sound = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\attack\sword.wav')
+        self.weapon_attack_sound.set_volume(0.4)
+
+
     def import_assets(self):
         self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
                                     'up_idle': [], 'down_idle': [], 'left_idle': [],
@@ -136,6 +141,7 @@ class Player(Entity):
 
             # tool use
             if keys[pygame.K_SPACE]:
+                self.weapon_attack_sound.play()
                 self.create_attack()
                 self.timers['tool use'].activate()
                 self.timers['one millisecond'].activate()

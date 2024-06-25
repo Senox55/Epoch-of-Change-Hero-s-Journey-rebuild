@@ -29,6 +29,7 @@ class ParticleEffect(pygame.sprite.Sprite):
         self.frames = animation_frames
         self.image = self.frames[self.frame_index]
         self.rect = self.image.get_rect(center=pos)
+        self.hitbox = self.rect
         self.z = LAYERS['main']
 
         self.timers = {'magic use': Timer(TIME_HEALING)}

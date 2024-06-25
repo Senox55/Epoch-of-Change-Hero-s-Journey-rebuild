@@ -112,6 +112,11 @@ class Level:
 
         self.overlay.display()
 
+    # def cleanup(self):
+    #     # Stop sounds, clear sprites, and any other cleanup tasks
+    #     self.sound.stop()
+    #     self.sprites.empty()
+
     def finish_player_death(self):
         if self.player.check_death():
             return True

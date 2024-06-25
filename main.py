@@ -17,6 +17,12 @@ class Game:
                         'restart': Button(MENU_POSITIONS['restart'], self.buttons_images['restart'])}
         self.current_screen = 'start_menu'
 
+        #sound
+        main_sound_1 = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\background\menu.wav')
+        main_sound_2 = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\background\level1.wav')
+        main_sound_1.play(loops=-1)
+        main_sound_2.play(loops=-1)
+
     def import_assets(self):
         self.buttons_images = {'start': None, 'exit': None, 'restart': None}
 

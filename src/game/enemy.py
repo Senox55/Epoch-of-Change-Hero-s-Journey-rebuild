@@ -61,6 +61,12 @@ class Enemy(Entity):
         self.notice_radius = monster_data[monster_name]['notice_radius']
         self.repulsion = monster_data[monster_name]['repulsion']
 
+        # death attributes
+        self.death = False
+
+        # import sounds
+        self.death_sound = pygame.mixer.Sound(r'..\Epoch-of-Change-Hero-s-Journey-rebuild\audio\death\slime_death.wav')
+
     def import_assets(self, name):
         self.movement_animations = {'up': [], 'down': [], 'left': [], 'right': [],
                                     'up_idle': [], 'down_idle': [], 'left_idle': [],
@@ -164,12 +170,13 @@ class Enemy(Entity):
 
     def check_death(self):
         if self.health <= 0:
-            if not (self.timers['death'].active):
+            if not self.timers['death'].active and not self.death:
+                self.death = True
                 self.timers['death'].activate()
                 self.frame_index = 0
-                return True
-            else:
-                return True
+                self.death_sound.play()
+
+            return True
 
     def hit_reaction(self):
         if not self.vulnerable:
