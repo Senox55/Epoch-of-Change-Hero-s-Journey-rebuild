@@ -25,6 +25,7 @@ LAYERS = {
 # general colours
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
+RED = (255, 0, 0)
 GREY = (128, 128, 128)
 DARK_GREY = (96, 96, 96)
 
@@ -47,3 +48,11 @@ monster_data = {
 
 # attack attributes
 TIME_ATTACKING = 350
+
+# menu
+START_BUTTON_WIDTH = 200
+START_BUTTON_HEIGHT = 100
+MENU_POSITIONS = {
+    'start': (SCREEN_WIDTH // 2 - 300, SCREEN_HEIGHT // 2),
+    'exit': (SCREEN_WIDTH // 2 + 300, SCREEN_HEIGHT // 2)
+}

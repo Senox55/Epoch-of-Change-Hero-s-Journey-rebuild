@@ -19,7 +19,7 @@ class Player(Entity):
         self.status = 'down_idle'
         self.image = self.movement_animations[self.status][self.frame_index]
         self.rect = self.image.get_rect(center=pos)
-        self.hitbox = self.rect.inflate(-30, -20)
+        self.hitbox = self.rect.inflate(-30, -30)
         self.z = LAYERS['main']
 
         # movement attributes

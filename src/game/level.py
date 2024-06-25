@@ -47,7 +47,7 @@ class Level:
         for obj in tmx_data.get_layer_by_name('bushes'):
             pos = (obj.x, obj.y)
             Bush(pos, obj.image, 'bushes',
-                 groups=[self.all_sprites, self.collision_sprites])
+                 groups=[self.all_sprites, self.collision_sprites, self.attackable_sprites])
 
         # entity
         for obj in tmx_data.get_layer_by_name('enemy'):
@@ -111,7 +111,7 @@ class CameraGroup(pygame.sprite.Group):
     def draw_hitbox(self, sprite):
         hitbox_rect = sprite.hitbox.copy()
         hitbox_rect.center -= self.offset
-        pygame.draw.rect(self.virtual_surface, (255, 0, 0), hitbox_rect, 1)
+        pygame.draw.rect(self.virtual_surface, RED, hitbox_rect, 1)
 
     def custom_draw(self, player):
         self.center_target_camera(player)
