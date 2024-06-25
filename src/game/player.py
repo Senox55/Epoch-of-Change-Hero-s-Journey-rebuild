@@ -52,7 +52,7 @@ class Player(Entity):
         self.selected_tool = self.tools[self.tool_index]
 
         # stats
-        self.stats = {'health': 100, 'damage': 30, 'speed': 100, 'energy': 100}
+        self.stats = {'health': 10000, 'damage': 30, 'speed': 100, 'energy': 10000}
         self.health = self.stats['health']
         self.energy = self.stats['energy']
         self.damage = self.stats['damage']
@@ -135,7 +135,7 @@ class Player(Entity):
                 self.selected_tool = self.tools[self.tool_index]
 
             if keys[pygame.K_f]:
-                self.create_magic('heal', 10, 10)
+                self.create_magic('heal', 40, 10)
                 self.timers['magic use'].activate()
                 self.timers['one millisecond'].activate()
                 self.direction = pygame.math.Vector2()

@@ -152,8 +152,8 @@ class CameraGroup(pygame.sprite.Group):
                     offset_rect = sprite.rect.copy()
                     offset_rect.center -= self.offset
                     self.virtual_surface.blit(sprite.image, offset_rect)
-                    if hasattr(sprite, 'hitbox'):
-                        self.draw_hitbox(sprite)
+                    # if hasattr(sprite, 'hitbox'):
+                    #     self.draw_hitbox(sprite)
 
         scaled_surf = pygame.transform.scale(self.virtual_surface, self.current_size)
         self.display_surface.blit(scaled_surf, self.virtual_rect)
